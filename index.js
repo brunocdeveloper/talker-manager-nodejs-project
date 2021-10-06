@@ -25,7 +25,7 @@ app.get('/talker', async (_req, res) => {
   res.status(200).json(JSON.parse(talkers));
 });
 
-/* app.get('/talker/:id', async (req, res) => {
+app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   const talkers = JSON.parse(await promiseToRead(fs.readFile('./talker.json', 'utf-8')));
 
@@ -34,4 +34,4 @@ app.get('/talker', async (_req, res) => {
   if (!result) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 
   return res.status(HTTP_OK_STATUS).send(result);
-}); */
+});
