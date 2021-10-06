@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const fs = require('fs').promises;
  
 const promiseToRead = require('./promiseToRead');
+const authMiddleware = require('./authMiddleware');
+const generateToken = require('./generateToken');
 
 const app = express();
 app.use(bodyParser.json());
@@ -34,4 +36,9 @@ app.get('/talker/:id', async (req, res) => {
   if (!result) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 
   return res.status(HTTP_OK_STATUS).send(result);
+});
+
+app.post('/login', authMiddleware, (_req, res) => {
+  const keyToken = generateToken();
+  res.status(200).send({ token: keyToken });
 });
