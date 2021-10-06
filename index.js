@@ -26,15 +26,6 @@ app.get('/talker', async (_req, res) => {
   res.status(200).send(JSON.parse(talkers));
 });
 
-/* app.get('/talker', async (req, res) => {
-  try {
-    const talker = await fs.readFile('./talker.json');
-    res.status(200).json(JSON.parse(talker));
-  } catch (error) {
-    res.status(200).json([]);
-  }
-}); */
-
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   const talkers = await promiseToRead(READING_PATH);
