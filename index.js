@@ -20,9 +20,9 @@ app.listen(PORT, () => {
 });
 
 app.get('/talker', async (_req, res) => {
-  const talkers = await promiseToRead(fs.readFile('./talker.json', 'utf-8'));
+  const talkers = JSON.parse(await promiseToRead(fs.readFile('./talker.json', 'utf-8')));
   if (talkers.length < 1) return res.status(200).json([]);
-  res.status(200).json(JSON.parse(talkers));
+  res.status(200).send(talkers);
 });
 
 app.get('/talker/:id', async (req, res) => {
