@@ -8,6 +8,7 @@ const generateToken = require('./generateToken');
 const { validateName, validateAge, validateTalk, validateWatchedAt,
   validateRate, 
   createTalks,
+  editTalker,
 } = require('./validateBody');
 const validateToken = require('./validateToken');
 
@@ -50,3 +51,6 @@ app.post('/login', authMiddleware, (_req, res) => {
 
 app.post('/talker', validateToken,
   validateName, validateAge, validateTalk, validateRate, validateWatchedAt, createTalks);
+
+app.put('/talker/:id', validateToken,
+validateName, validateAge, validateTalk, validateRate, validateWatchedAt, editTalker);
