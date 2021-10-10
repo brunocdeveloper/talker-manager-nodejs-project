@@ -50,3 +50,5 @@ app.post('/login', authMiddleware, (_req, res) => {
 
 app.post('/talker', validateToken,
   validateName, validateAge, validateTalk, validateRate, validateWatchedAt, createTalks);
+
+/* */
