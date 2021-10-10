@@ -1,16 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs').promises;
  
-const promiseToRead = require('./promiseToRead');
 const authMiddleware = require('./authMiddleware');
 const generateToken = require('./generateToken');
 const { validateName, validateAge, validateTalk, validateWatchedAt,
-  validateRate, 
-  createTalks,
-  editTalker,
-  deleteTalker,
+  validateRate, createTalks, editTalker, deleteTalker, getAllTalker, getTalkerById,
+  getTalkerByQueryString,
 } = require('./validateBody');
+
 const validateToken = require('./validateToken');
 
 const app = express();
@@ -28,22 +25,11 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
-app.get('/talker', async (_req, res) => {
-  const talkers = JSON.parse(await promiseToRead(fs.readFile('./talker.json', 'utf-8')));
-  if (talkers.length < 1) return res.status(200).json([]);
-  return res.status(200).json(talkers);
-});
+app.get('/talker/search', validateToken, getTalkerByQueryString);
 
-app.get('/talker/:id', async (req, res) => {
-  const { id } = req.params;
-  const talkers = JSON.parse(await promiseToRead(fs.readFile('./talker.json', 'utf-8')));
+app.get('/talker', getAllTalker);
 
-  const result = talkers.find((person) => person.id === Number(id));
-
-  if (!result) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-
-  return res.status(HTTP_OK_STATUS).json(result);
-});
+app.get('/talker/:id', getTalkerById);
 
 app.post('/login', authMiddleware, (_req, res) => {
   const keyToken = generateToken();

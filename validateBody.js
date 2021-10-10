@@ -1,6 +1,26 @@
 const fs = require('fs').promises;
 
+const promiseToRead = require('./promiseToRead.js');
+
 const PATH = './talker.json';
+const HTTP_OK_STATUS = 200;
+
+const getAllTalker = async (_req, res) => {
+  const talkers = JSON.parse(await promiseToRead(fs.readFile('./talker.json', 'utf-8')));
+  if (talkers.length < 1) return res.status(200).json([]);
+  return res.status(200).json(talkers);
+};
+
+const getTalkerById = async (req, res) => {
+  const { id } = req.params;
+  const talkers = JSON.parse(await promiseToRead(fs.readFile('./talker.json', 'utf-8')));
+
+  const result = talkers.find((person) => person.id === Number(id));
+
+  if (!result) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+
+  return res.status(HTTP_OK_STATUS).json(result);
+};
 
 const validateName = (req, res, next) => {
   const { name } = req.body;
@@ -113,8 +133,20 @@ const deleteTalker = async (req, res) => {
   talkers.splice(talkerIndex, 1);
 
   await fs.writeFile(PATH, JSON.stringify(talkers));
-  
+
   return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+};
+
+const getTalkerByQueryString = async (req, res) => {
+  const { q } = req.query;
+
+  const talkers = JSON.parse(await fs.readFile(PATH));
+
+  if (!q || q === '') return res.status(200).json(talkers);
+
+  const talkerFilter = talkers.filter((t) => t.name.includes(q));
+
+  return res.status(200).json(talkerFilter);
 };
 
 module.exports = {
@@ -126,4 +158,7 @@ module.exports = {
   createTalks,
   editTalker,
   deleteTalker,
+  getAllTalker,
+  getTalkerById,
+  getTalkerByQueryString,
 };
