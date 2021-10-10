@@ -9,6 +9,7 @@ const { validateName, validateAge, validateTalk, validateWatchedAt,
   validateRate, 
   createTalks,
   editTalker,
+  deleteTalker,
 } = require('./validateBody');
 const validateToken = require('./validateToken');
 
@@ -54,3 +55,5 @@ app.post('/talker', validateToken,
 
 app.put('/talker/:id', validateToken,
 validateName, validateAge, validateTalk, validateRate, validateWatchedAt, editTalker);
+
+app.delete('/talker/:id', validateToken, deleteTalker);

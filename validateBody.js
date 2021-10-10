@@ -1,5 +1,7 @@
 const fs = require('fs').promises;
 
+const PATH = './talker.json';
+
 const validateName = (req, res, next) => {
   const { name } = req.body;
 
@@ -68,7 +70,7 @@ const validateRate = (req, res, next) => {
 const createTalks = async (req, res) => {
   const { name, age, talk } = req.body;
   
-  const talkers = JSON.parse(await fs.readFile('./talker.json'));
+  const talkers = JSON.parse(await fs.readFile(PATH));
 
   talkers.push({
     id: talkers.length + 1,
@@ -77,7 +79,7 @@ const createTalks = async (req, res) => {
     talk,
   });
 
-  await fs.writeFile('./talker.json', JSON.stringify(talkers));
+  await fs.writeFile(PATH, JSON.stringify(talkers));
   return res.status(201).json({
     id: talkers.length,
     name,
@@ -90,24 +92,30 @@ const editTalker = async (req, res) => {
   const { id } = req.params;
   const { name, age, talk } = req.body;
 
-  const talkers = JSON.parse(await fs.readFile('./talker.json'));
+  const talkers = JSON.parse(await fs.readFile(PATH));
 
   const talkerIndex = talkers.findIndex((t) => t.id === Number(id));
 
   talkers[talkerIndex] = { ...talkers[talkerIndex], name, age, talk };
 
-  await fs.writeFile('./talker.json', JSON.stringify(talkers));
+  await fs.writeFile(PATH, JSON.stringify(talkers));
 
   res.status(200).json(talkers[talkerIndex]);
 };
 
-/* const allValidations = async () => {
-  validateName();
-  validateAge();
-  validateTalk();
-  validateWatchedAt();
-  validateRate();
-};  */
+const deleteTalker = async (req, res) => {
+  const { id } = req.params;
+
+  const talkers = JSON.parse(await fs.readFile(PATH));
+
+  const talkerIndex = talkers.findIndex((t) => t.id === Number(id));
+
+  talkers.splice(talkerIndex, 1);
+
+  await fs.writeFile(PATH, JSON.stringify(talkers));
+  
+  return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+};
 
 module.exports = {
   validateName,
@@ -117,4 +125,5 @@ module.exports = {
   validateRate,
   createTalks,
   editTalker,
+  deleteTalker,
 };
