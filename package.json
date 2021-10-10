@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --runInBand",
     "restore": "cp tests/seed.json talker.json",
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json ."
   },
   "keywords": [],
