@@ -5,11 +5,11 @@ const fs = require('fs').promises;
 const promiseToRead = require('./promiseToRead');
 const authMiddleware = require('./authMiddleware');
 const generateToken = require('./generateToken');
-const { validateName, validateAge, validateTalk, validateWatchedAt,
+/* const { validateName, validateAge, validateTalk, validateWatchedAt,
   validateRate, 
   createTalks,
-} = require('./validateBody');
-const validateToken = require('./validateToken');
+} = require('./validateBody'); */
+/* const validateToken = require('./validateToken'); */
 
 const app = express();
 app.use(bodyParser.json());
@@ -48,7 +48,6 @@ app.post('/login', authMiddleware, (_req, res) => {
   return res.status(200).json({ token: keyToken });
 });
 
-app.post('/talker', validateToken,
+/* app.post('/talker', validateToken,
   validateName, validateAge, validateTalk, validateRate, validateWatchedAt, createTalks);
-
-/* */
+ */
