@@ -6,7 +6,8 @@ const promiseToRead = require('./promiseToRead');
 const authMiddleware = require('./authMiddleware');
 const generateToken = require('./generateToken');
 const { validateName, validateAge, validateTalk, validateWatchedAt,
-  validateRate,
+  validateRate, 
+  createTalks,
 } = require('./validateBody');
 const validateToken = require('./validateToken');
 
@@ -48,22 +49,4 @@ app.post('/login', authMiddleware, (_req, res) => {
 });
 
 app.post('/talker', validateToken,
-  validateName, validateAge, validateTalk, validateRate, validateWatchedAt, 
-    async (req, res) => {
-      const { name, age, talk } = req.body;
-    const talkers = JSON.parse(await fs.readFile('./talker.json'));
-    talkers.push({
-      id: talkers.length + 1,
-      name,
-      age,
-      talk,
-    });
-
-    await fs.writeFile('./talker.json', JSON.stringify(talkers));
-    return res.status(201).json({
-      id: talkers.length,
-      name,
-      age,
-      talk,
-  });
-  });
+  validateName, validateAge, validateTalk, validateRate, validateWatchedAt, createTalks);

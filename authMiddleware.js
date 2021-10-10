@@ -7,14 +7,14 @@ const authMiddleware = (req, res, next) => {
   const { email, password } = req.body;
   const validEmail = validateEmail(email);
 
-  if (!email) res.status(400).send({ message: 'O campo "email" é obrigatório' }); 
+  if (!email) return res.status(400).send({ message: 'O campo "email" é obrigatório' }); 
 
   if (!validEmail) {
-    res.status(400).send({ message: 'O "email" deve ter o formato "email@email.com"' });
+    return res.status(400).send({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
 
   if (!password) {
-    res.status(400).send({ message: 'O campo "password" é obrigatório' });
+    return res.status(400).send({ message: 'O campo "password" é obrigatório' });
   }
 
   if (password.length < 6) {
